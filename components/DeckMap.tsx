@@ -2,20 +2,27 @@
 import { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import { MapboxOverlay } from "@deck.gl/mapbox";
-import { ScatterplotLayer, PathLayer } from "@deck.gl/layers";
+import { ScatterplotLayer, PathLayer, PolygonLayer } from "@deck.gl/layers";
 import { AQI_STOPS } from "@/lib/india";
 
 type Mode = "aqi" | "gas" | "hotspots" | "transport";
 type RGB = [number, number, number];
 
-// minimal, offline dark basemap: void + India outline (no external tiles)
+// Real dark basemap (CARTO dark — coastlines, state borders, cities) + a faint
+// India outline highlight. CARTO public basemaps need attribution, no API key.
+const CARTO = ["a", "b", "c", "d"].map(
+  (s) => `https://${s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png`
+);
 const STYLE: maplibregl.StyleSpecification = {
   version: 8,
-  sources: { india: { type: "geojson", data: "/data/india.geojson" } },
+  sources: {
+    carto: { type: "raster", tiles: CARTO, tileSize: 256, attribution: "© OpenStreetMap, © CARTO" },
+    india: { type: "geojson", data: "/data/india.geojson" },
+  },
   layers: [
     { id: "bg", type: "background", paint: { "background-color": "#07090c" } },
-    { id: "ifill", type: "fill", source: "india", paint: { "fill-color": "#0e1217", "fill-opacity": 0.55 } },
-    { id: "iline", type: "line", source: "india", paint: { "line-color": "#3a4753", "line-width": 1 } },
+    { id: "carto", type: "raster", source: "carto", paint: { "raster-opacity": 0.85 } },
+    { id: "iline", type: "line", source: "india", paint: { "line-color": "#5fe3d2", "line-width": 1, "line-opacity": 0.35 } },
   ],
 };
 
@@ -112,24 +119,27 @@ export function DeckMap({
     const { mode: m, frame: fr, gas: g } = props.current;
     const layers: unknown[] = [];
 
-    const grid = (rows: number[][], color: (v: number) => RGB, r = 27000, alpha = 200, id = "grid") =>
-      new ScatterplotLayer({
-        id, data: rows, getPosition: (x: number[]) => [x[0], x[1]],
-        getRadius: r, radiusUnits: "meters", radiusMinPixels: 1.5,
+    const HALF = 0.25; // 0.5° grid -> real geographic raster cells
+    const cellPoly = (lon: number, lat: number) =>
+      [[lon - HALF, lat - HALF], [lon + HALF, lat - HALF], [lon + HALF, lat + HALF], [lon - HALF, lat + HALF]];
+    const grid = (rows: number[][], color: (v: number) => RGB, alpha = 185, id = "grid") =>
+      new PolygonLayer({
+        id, data: rows, getPolygon: (x: number[]) => cellPoly(x[0], x[1]),
         getFillColor: (x: number[]) => [...color(x[2]), alpha] as [number, number, number, number],
-        pickable: true,
+        stroked: false, filled: true, pickable: true,
+        updateTriggers: { getFillColor: [id, fr, g] },
       });
 
     if (m === "aqi" && d.aqi) {
       const f = d.aqi.frames[Math.min(fr, d.aqi.frames.length - 1)];
-      layers.push(grid(f.cells, aqiRGB, 27000, 210, "aqi"));
+      layers.push(grid(f.cells, aqiRGB, 200, "aqi"));
     }
     if (m === "gas" && d.gas) {
       const rows = d.gas.cells.map((c: any) => [c.lon, c.lat, c[g]]);
-      layers.push(grid(rows, (v) => rampColor(GAS_RAMP[g] ?? GAS_RAMP.hcho, v), 27000, 200, "gas"));
+      layers.push(grid(rows, (v) => rampColor(GAS_RAMP[g] ?? GAS_RAMP.hcho, v), 195, "gas"));
     }
     if (m === "hotspots" && d.hcho) {
-      layers.push(grid(d.hcho, (v) => rampColor(GAS_RAMP.hcho, v), 26000, 150, "hcho-base"));
+      layers.push(grid(d.hcho, (v) => rampColor(GAS_RAMP.hcho, v), 150, "hcho-base"));
       if (d.hotspots)
         layers.push(new ScatterplotLayer({
           id: "hotspots", data: d.hotspots,
@@ -141,7 +151,7 @@ export function DeckMap({
         }));
     }
     if (m === "transport") {
-      if (d.hcho) layers.push(grid(d.hcho, (v) => rampColor(GAS_RAMP.hcho, v), 26000, 110, "hcho-base"));
+      if (d.hcho) layers.push(grid(d.hcho, (v) => rampColor(GAS_RAMP.hcho, v), 110, "hcho-base"));
       if (d.fires)
         layers.push(new ScatterplotLayer({
           id: "fires", data: d.fires, getPosition: (x: number[]) => [x[0], x[1]],
@@ -172,10 +182,12 @@ export function DeckMap({
   useEffect(() => {
     if (!wrap.current || map.current) return;
     const m = new maplibregl.Map({
-      container: wrap.current, style: STYLE, center: [81, 22.5], zoom: 3.4,
-      minZoom: 3, maxZoom: 7, attributionControl: false, dragRotate: false,
+      container: wrap.current, style: STYLE, center: [80.5, 22.5], zoom: 4,
+      minZoom: 3.2, maxZoom: 8, attributionControl: false, dragRotate: false,
+      maxBounds: [[58, -2], [104, 42]],
     });
     m.touchZoomRotate.disableRotation();
+    m.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
     map.current = m;
     m.on("load", async () => {
       const need: Record<Mode, string[]> = {

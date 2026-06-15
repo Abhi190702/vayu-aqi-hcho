@@ -23,6 +23,7 @@
 :root {
   --bg: #07090c;
   --fg: #ececE6;
+  --line: rgba(255, 255, 255, 0.10);
   /* AQI — official CPCB ramp */
   --aqi-good: #009865;
   --aqi-satisfactory: #84cf33;
@@ -67,7 +68,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .serif   { font-family: var(--font-serif); }
 .lede    { font-family: var(--font-serif); font-weight: 400; line-height: 1.5; color: var(--color-text-2); }
 .data    { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: 0.01em; }
-.hairline { border-color: rgba(255,255,255,0.10); }
+.hairline { border-color: var(--line); }
 
 /* paper (light "field-notebook") panels for documentary rhythm */
 .panel-paper { background: var(--color-paper); color: var(--color-paper-ink); }
@@ -92,6 +93,27 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 [data-reveal] { opacity: 0; }
 .reveal-line { display: block; overflow: hidden; }
 .reveal-line > span { display: block; transform: translateY(110%); }
+
+/* ---- light theme: paper-primary reading surface; observation sections stay dark ---- */
+html[data-theme="light"] {
+  --bg: #f4f2ec;
+  --fg: #14181d;
+  --line: rgba(0, 0, 0, 0.12);
+  --color-text-1: #14181d;
+  --color-text-2: #4a525b;
+  --color-text-3: #8a8478;
+  --color-signal: #0e8576;
+}
+html[data-theme="light"] section:not(.panel-paper),
+html[data-theme="light"] footer {
+  background: #0b0f14;
+  color: #ececE6;
+  --color-text-1: #ececE6;
+  --color-text-2: #a7aeb6;
+  --color-text-3: #6b7480;
+  --color-signal: #5fe3d2;
+  --line: rgba(255, 255, 255, 0.10);
+}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

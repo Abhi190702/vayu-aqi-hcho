@@ -324,6 +324,14 @@ export function Model() {
     { x: 490, label: "LSTM", sub: "temporal memory" },
     { x: 690, label: "AQI", sub: "surface prediction" },
   ];
+  useEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+    const a = animate(".model-sig", {
+      offsetDistance: ["0%", "100%"], duration: 2600, loop: true, ease: "linear",
+    });
+    return () => a.cancel();
+  }, []);
   return (
     <Section id="model" index="11" eyebrow="The Engine" variant="paper"
       title="How the model reads the sky."
@@ -334,8 +342,8 @@ export function Model() {
             <path key={i} className="draw" d={`M ${s.x + 60} 60 L ${stages[i + 1].x - 60} 60`}
               stroke="var(--color-signal-dim)" strokeWidth="1.4" fill="none" markerEnd="url(#m)" />
           ))}
-          <circle className="sig" r="3" fill="var(--color-signal)"
-            style={{ offsetPath: `path('M 150 60 L 800 60')`, offsetDistance: "0%" } as React.CSSProperties} />
+          <circle className="model-sig" r="3.5" fill="var(--color-signal)"
+            style={{ offsetPath: `path('M 150 60 L 690 60')`, offsetDistance: "0%" } as React.CSSProperties} />
           {stages.map((s) => (
             <g key={s.label}>
               <rect x={s.x - 60} y="35" width="120" height="50" rx="5" fill="var(--color-paper)" stroke="var(--color-signal-dim)" strokeWidth="1.2" />

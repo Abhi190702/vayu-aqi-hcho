@@ -1,5 +1,6 @@
 import { Preloader } from "@/components/Preloader";
 import { ChapterRail } from "@/components/ChapterRail";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Hero } from "@/components/Hero";
 import { Pipeline } from "@/components/Pipeline";
 import { Section } from "@/components/Section";
@@ -13,6 +14,7 @@ export default function Home() {
     <>
       <Preloader />
       <ChapterRail />
+      <ThemeToggle />
       <main>
         <Hero />
         <AirQuality />
