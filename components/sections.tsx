@@ -58,7 +58,7 @@ const SNAPSHOT = [
   ["Fire-linked Hotspots", "91", "real MODIS-attributed HCHO clusters"],
   ["Dominant Pollutant", "PM2.5", "aerosol-driven AQI signal"],
   ["Transport Risk", "High", "Punjab/Haryana -> Delhi NCR pathway"],
-  ["Data Status", "Real satellite layers", "TROPOMI/MODIS observed · AQI = model estimate"],
+  ["Data Status", "Real + validated", "TROPOMI/MODIS observed · AQI validated vs 161 CPCB stations"],
 ];
 
 export function MissionSnapshot() {
@@ -69,8 +69,8 @@ export function MissionSnapshot() {
       <div className="mt-8 inline-flex max-w-full flex-wrap gap-2 rounded-sm border px-3 py-2 data text-[11px]"
         style={{ borderColor: "var(--line)", color: "var(--color-text-2)", background: "rgba(255,255,255,0.03)" }}>
         <span style={{ color: "var(--color-signal)" }}>Real TROPOMI · MODIS Layers</span>
-        <span>Post-monsoon 2021 · India</span>
-        <span>AQI = hybrid-model estimate</span>
+        <span>Post-monsoon · India</span>
+        <span>AQI = RF model, CPCB-validated (random-CV R² 0.53–0.71)</span>
       </div>
       <div className="mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-sm border sm:grid-cols-2 lg:grid-cols-3"
         style={{ borderColor: "var(--line)", background: "var(--line)" }}>

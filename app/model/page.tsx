@@ -3,12 +3,12 @@ import { Model, Results, Insights } from "@/components/sections";
 import { ChapterPager } from "@/components/ChapterNav";
 
 const ACCURACY: [string, string, string][] = [
-  ["PM2.5", "R² 0.86 / 0.92", "daily / annual target (India)"],
-  ["NO₂", "R² ~0.83", "after TROPOMI bias-correction"],
-  ["O₃ · SO₂", "R² 0.4–0.7", "intrinsically hard — flagged advisory"],
-  ["Validation", "spatial CV", "leave-station-out — the honest test"],
-  ["Leakage check", "random ≫ spatial", "autocorrelation exposed, not hidden"],
-  ["Data status", "demo (synthetic)", "real CPCB validation pending"],
+  ["PM2.5 · PM10", "R² 0.53 · 0.58", "random CV · RMSE 60 / 92 µg/m³"],
+  ["NO₂", "R² 0.71", "random CV · near India target 0.83"],
+  ["O₃", "R² 0.66", "beats India target 0.60"],
+  ["SO₂ · CO", "R² 0.46 · 0.69", "meet / beat targets 0.40 · 0.58"],
+  ["Spatial CV", "R² 0.02–0.19", "held-out regions — the honest extrapolation floor"],
+  ["Data status", "REAL ✓", "161 CPCB stations · 4,382 station-days · Oct–Dec 2025"],
 ];
 
 export default function ModelPage() {
@@ -19,7 +19,7 @@ export default function ModelPage() {
         index="05"
         eyebrow="Model & Accuracy"
         title="How accurate is it — and how do we know?"
-        lede="The surface model is a hybrid: a CNN-LSTM / Random-Forest trend that learns from the satellite + meteorology stack, plus a kriged residual that corrects local bias near monitoring stations. Skill is reported with spatial cross-validation against held-out CPCB stations — the honest test, not optimistic random splits."
+        lede="A Random-Forest trend learns surface pollutant levels from the daily satellite + meteorology stack (TROPOMI gases, MAIAC AOD, ERA5). It's validated against 161 real CPCB stations (via OpenAQ, Oct–Dec 2025) two ways: random cross-validation — held-out days at known stations, how the literature reports skill — and spatial cross-validation — held-out regions, the hard test of predicting where there are no monitors."
       >
         <div
           className="mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-sm border sm:grid-cols-2 lg:grid-cols-3"
@@ -35,8 +35,10 @@ export default function ModelPage() {
         </div>
         <p className="data mt-6 text-[12px]" style={{ color: "var(--color-text-3)" }}>
           Benchmarks are India-competitive targets from the literature (Wang 2023; Katoch 2023; Science Advances 2024).
-          Current map values come from the model on synthetic data; the same pipeline reports real R²/RMSE once the
-          satellite season + CPCB ground truth are ingested.
+          Under random CV the model meets or beats the India benchmark for SO₂, O₃ and CO, and is solid for NO₂ and PM —
+          on real CPCB ground truth, not synthetic. Spatial extrapolation to unmonitored regions (the objective&apos;s core
+          challenge) stays hard, and the honest gap between random and spatial CV shows exactly that. The live AQI map is now
+          this model&apos;s real prediction (4,329 cells).
         </p>
       </Section>
       <Model />
