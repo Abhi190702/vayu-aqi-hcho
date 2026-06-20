@@ -60,7 +60,7 @@ export function IndiaField({
         i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
       });
       ctx.closePath();
-      ctx.strokeStyle = `rgba(95,227,210,${alpha})`;
+      ctx.strokeStyle = `rgba(255,122,51,${alpha})`;
       ctx.lineWidth = 1;
       ctx.stroke();
     };
@@ -74,11 +74,11 @@ export function IndiaField({
         seasonRef.current ?? (reduce ? 0.6 : Math.sin(t * 0.25) * 0.5 + 0.5);
       for (const p of pts) {
         let [x, y] = project(p.lon, p.lat, w, h);
-        let r = 2, a = 1, color = "rgba(95,227,210,0.5)";
+        let r = 2, a = 1, color = "rgba(255,122,51,0.5)";
         if (mode === "atmos") {
           if (!reduce) { x += Math.sin(t + p.ph) * 1.6; y += Math.cos(t * 0.8 + p.ph) * 1.2; }
           a = 0.18 + 0.45 * p.v; r = 1.3 + 1.7 * p.v;
-          color = `rgba(120,210,235,${a})`;
+          color = `rgba(255,150,80,${a})`;
         } else if (mode === "aqi" || mode === "final") {
           const aqi = intensityToAqi(Math.min(1, p.v * (0.55 + 0.6 * season)));
           color = aqiColor(aqi); a = mode === "final" ? 0.22 : 0.82; r = 3.1;

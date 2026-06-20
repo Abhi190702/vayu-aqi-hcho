@@ -347,7 +347,7 @@ export function HCHO() {
 export function Hotspots() {
   const [readout, setReadout] = useState<string | null>(null);
   const legend: [string, string][] = [
-    ["agri_burning", "#ff7a45"], ["urban", "#5fe3d2"], ["industrial", "#f2a93b"],
+    ["agri_burning", "#ff7a45"], ["urban", "#a78bfa"], ["industrial", "#f2a93b"],
     ["biogenic", "#7fbf7f"], ["other", "#969ca4"],
   ];
   return (

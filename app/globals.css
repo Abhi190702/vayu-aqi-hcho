@@ -9,8 +9,8 @@
   --color-text-1: #ececE6;
   --color-text-2: #a7aeb6;
   --color-text-3: #6b7480;
-  --color-signal: #5fe3d2;
-  --color-signal-dim: #2e7c74;
+  --color-signal: #ff7a33;
+  --color-signal-dim: #b8531f;
   --color-ember: #ff7a45;
   --color-paper: #f4f2ec;
   --color-paper-ink: #14181d;
@@ -39,7 +39,7 @@
 * { box-sizing: border-box; }
 html {
   scroll-behavior: auto;
-  scrollbar-color: rgba(95, 227, 210, 0.38) var(--color-ink-900);
+  scrollbar-color: rgba(255, 122, 51, 0.38) var(--color-ink-900);
   scrollbar-width: thin;
 }
 
@@ -73,13 +73,13 @@ html.lenis body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(95, 227, 210, 0.30);
+  background: rgba(255, 122, 51, 0.30);
   border: 2px solid var(--color-ink-900);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(95, 227, 210, 0.48);
+  background: rgba(255, 122, 51, 0.48);
 }
 
 body {
@@ -147,14 +147,14 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   display: inline-flex;
   align-items: center;
   width: fit-content;
-  border: 1px solid rgba(46, 124, 116, 0.35);
+  border: 1px solid rgba(255, 122, 51, 0.35);
   border-radius: 999px;
   padding: 0.28rem 0.55rem;
   font-family: var(--font-mono);
   font-size: 10px;
   line-height: 1;
   color: var(--color-signal-dim);
-  background: rgba(95, 227, 210, 0.08);
+  background: rgba(255, 122, 51, 0.10);
   white-space: nowrap;
 }
 
@@ -178,7 +178,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 
 section:not(.panel-paper) .confidence-high,
 footer .confidence-high {
-  color: #5fe3d2;
+  color: #84cf33;
 }
 
 section:not(.panel-paper) .confidence-medium,
@@ -217,7 +217,7 @@ html[data-theme="light"] {
   --color-text-1: #14181d;
   --color-text-2: #4a525b;
   --color-text-3: #8a8478;
-  --color-signal: #0e8576;
+  --color-signal: #c2410c;
 }
 html[data-theme="light"] section:not(.panel-paper),
 html[data-theme="light"] footer {
@@ -226,7 +226,7 @@ html[data-theme="light"] footer {
   --color-text-1: #ececE6;
   --color-text-2: #a7aeb6;
   --color-text-3: #6b7480;
-  --color-signal: #5fe3d2;
+  --color-signal: #ff7a33;
   --line: rgba(255, 255, 255, 0.10);
 }
 

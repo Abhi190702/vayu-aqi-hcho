@@ -34,9 +34,9 @@ const STYLE: maplibregl.StyleSpecification = {
     { id: "bg", type: "background", paint: { "background-color": "#07090c" } },
     { id: "carto", type: "raster", source: "carto", paint: { "raster-opacity": 0.7 } },
     // faint land tint so India reads clearly against the ocean
-    { id: "ifill", type: "fill", source: "india", paint: { "fill-color": "#123b3a", "fill-opacity": 0.16 } },
+    { id: "ifill", type: "fill", source: "india", paint: { "fill-color": "#103a1e", "fill-opacity": 0.16 } },
     // crisp official boundary
-    { id: "iline", type: "line", source: "india", paint: { "line-color": "#5fe3d2", "line-width": 1.4, "line-opacity": 0.6 } },
+    { id: "iline", type: "line", source: "india", paint: { "line-color": "#ff7a33", "line-width": 1.4, "line-opacity": 0.6 } },
   ],
 };
 
@@ -59,7 +59,7 @@ function rampColor(stops: RGB[], t: number): RGB {
   return [0, 1, 2].map((j) => Math.round(a[j] + (b[j] - a[j]) * k)) as RGB;
 }
 const SOURCE_RGB: Record<string, RGB> = {
-  agri_burning: [255, 122, 69], urban: [95, 227, 210], industrial: [242, 169, 59],
+  agri_burning: [255, 122, 69], urban: [167, 139, 250], industrial: [242, 169, 59],
   forest_fire: [255, 90, 60], biogenic: [127, 191, 127], other: [150, 156, 164],
 };
 

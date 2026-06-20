@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { ChapterNav } from "@/components/ChapterNav";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { Footer } from "@/components/sections";
 
 export const metadata: Metadata = {
   title: "VAYU — India's Air, Observed",
@@ -16,7 +19,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <SmoothScroll />
+        <ChapterNav />
+        <ThemeToggle />
         {children}
+        <Footer />
       </body>
     </html>
   );
